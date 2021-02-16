@@ -1,5 +1,5 @@
 
-1- Trimmomatic - Code can be found in 
+1- Trimmomatic
 
 Sample template
 java -jar trimmomatic_path/trimmomatic-0.36.jar PE -threads 30 -phred33 file_R1.fastq.gz file_R2.fastq.gz -baseout file.fq.gz ILLUMINACLIP: adapter_path/Trimmomatic-0.36/adapters/TruSeq3-PE-2.fa:2:30:10 LEADING:20 TRAILING:20 SLIDINGWINDOW:20:25 MINLEN:50
