@@ -1,0 +1,48 @@
+
+1- Trimmomatic - Code can be found in 
+
+Sample template
+java -jar trimmomatic_path/trimmomatic-0.36.jar PE -threads 30 -phred33 file_R1.fastq.gz file_R2.fastq.gz -baseout file.fq.gz ILLUMINACLIP: adapter_path/Trimmomatic-0.36/adapters/TruSeq3-PE-2.fa:2:30:10 LEADING:20 TRAILING:20 SLIDINGWINDOW:20:25 MINLEN:50
+
+
+2- Fastqc
+fastqc -t 20 -o where_you_want_to_store_fastqc/fastqc1 *.fq.gz
+
+3 -STAR
+A -GENOME DIRECTORY CREATION
+
+STAR_path/STAR  --runThreadN 8 --runMode genomeGenerate --genomeDir genome_alignment_directory/ref/ --genomeFastaFiles path/GCF_003254395.2_Amel_HAv3.1_genomic.fna --genomeSAindexNbases 12 --sjdbGTFfile  path/GCF_003254395.2_Amel_HAv3.1_genomic.gtf --sjdbOverhang 100 
+
+
+B -ANALYSIS
+
+for i in *_1P.fastq.gz; do
+STAR_path/STAR   --runMode alignReads --readFilesCommand zcat --outSAMtype BAM SortedByCoordinate --genomeDir enome_alignment_directory/ref/  --readFilesIn $i ${i%_1P.fastq.gz}_2P.fastq.gz --runThreadN 8 --quantMode GeneCounts --outSAMattributes All --twopassMode Basic  --outFileNamePrefix ${i%_1P.fastq.gz} --sjdbGTFfile  path/GCF_003254395.2_Amel_HAv3.1_genomic.gtf
+done
+4- Redo fastqc+ multiQC
+
+5 -SAMTOOLS
+mv *.bam path_where_you_want_to_move_files/
+
+
+Samtools flagstat bamfile
+for i in *.bam; do
+
+samtools index $i > $i.txt
+done
+
+
+6- MULTIQC alignment 
+On log.final.out files:
+multiqc -d -dd 2 .
+
+
+
+7-HTSEQ-COUNT 
+
+for i in *.bam; do
+ path/htseq-count -f bam -r pos -s no -i Parent $i refpath/GCF_003254395.2_Amel_HAv3.1_genomic.gff > $i.txt
+done
+
+
+TXT FILES GO TO R TO BE ANALYZED
