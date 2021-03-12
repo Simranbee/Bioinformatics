@@ -1,0 +1,36 @@
+#connected to the MariaDB server to collect UCSC genome data 
+#https://www.google.com/search?q=maria+database&rlz=1C5CHFA_enCA878CA878&oq=maria+data&aqs=chrome.0.0j69i57j0i20i263l2j0l6.5103j0j7&sourceid=chrome&ie=UTF-8SHOW TABLES;
+#https://genome.ucsc.edu/goldenPath/help/mysql.html
+
+
+
+
+SHOW COLUMNS FROM hg38.gtexGeneV8
+
+
+#I want the rnaSeq data from the hd38 database
+SHOW COLUMNS FROM hg38.gtexGeneV8;
+
+#I'm selecting only protein coding genes.  Also I dont need chromosome length info so I'm alsp filtering it out
+SELECT chrom, name, score, strand, geneid, geneType, expCount, expScores 
+FROM hg38.gtexGeneV8 WHERE geneType = 'protein_coding' LIMIT 56200;
+
+#Now we export to CSV
+
+SHOW COLUMNS FROM hgFixed.gtexTissueV8;
+SELECT  id, name, description, organ, color, abbrev FROM hgFixed.gtexTissueV8 LIMIT 54;
+
+SELECT SQL_CALC_FOUND_ROWS chrom, name, score, strand, geneid, geneType, expCount, expScores FROM hg38.gtexGeneV8 WHERE geneType = 'protein_coding' LIMIT 150;
+
+SHOW COLUMNS FROM   hgFixed.gtexSampleDataV8;
+
+SELECT geneId, sample, tissue, score FROM hgFixed.gtexSampleDataV8
+ WHERE tissue = 'brainCortex' LIMIT ;
+
+SELECT * from hgFixed.gtexSampleDataV8
+ WHERE tissue = 'brainCortex';
+
+
+
+
+ SELECT DISTINCT tissue FROM hgFixed.gtexSampleDataV8;
